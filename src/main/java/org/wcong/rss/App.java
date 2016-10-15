@@ -19,54 +19,54 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
+ * ok start with app
  * Created by wcong on 2016/9/26.
  */
 public class App {
 
-    public static void main(String[] args) throws ServletException, LifecycleException, InterruptedException {
-        Tomcat tomcat = new Tomcat();
-        tomcat.getHost().setAppBase("");
-        Context context = tomcat.addContext("", "");
+	public static void main(String[] args) throws ServletException, LifecycleException, InterruptedException {
+		Tomcat tomcat = new Tomcat();
+		tomcat.getHost().setAppBase("");
+		Context context = tomcat.addContext("", "");
 
-        addGuiceFilter(context);
+		addGuiceFilter(context);
 
-        tomcat.init();
-        tomcat.start();
-        tomcat.getServer().await();
-    }
+		tomcat.init();
+		tomcat.start();
+		tomcat.getServer().await();
+	}
 
-    private static void addGuiceFilter(Context context) {
-        FilterDef filter1definition = new FilterDef();
-        filter1definition.setFilterName(GuiceFilter.class.getSimpleName());
-        filter1definition.setFilterClass(GuiceFilter.class.getName());
-        context.addFilterDef(filter1definition);
-        FilterMap filter1mapping = new FilterMap();
-        filter1mapping.setFilterName(GuiceFilter.class.getSimpleName());
-        filter1mapping.addURLPattern("/*");
-        context.addFilterMap(filter1mapping);
-        context.addApplicationListener(MyListener.class.getName());
-    }
+	private static void addGuiceFilter(Context context) {
+		FilterDef filter1definition = new FilterDef();
+		filter1definition.setFilterName(GuiceFilter.class.getSimpleName());
+		filter1definition.setFilterClass(GuiceFilter.class.getName());
+		context.addFilterDef(filter1definition);
+		FilterMap filter1mapping = new FilterMap();
+		filter1mapping.setFilterName(GuiceFilter.class.getSimpleName());
+		filter1mapping.addURLPattern("/*");
+		context.addFilterMap(filter1mapping);
+		context.addApplicationListener(MyListener.class.getName());
+	}
 
-    public static class MyListener extends GuiceServletContextListener {
+	public static class MyListener extends GuiceServletContextListener {
 
-        protected Injector getInjector() {
-            return Guice.createInjector(new ServletModule() {
-                @Override
-                protected void configureServlets() {
-                    serve("*").with(MyHttpServlet.class);
-                }
-            });
-        }
-    }
+		protected Injector getInjector() {
+			return Guice.createInjector(new ServletModule() {
+				@Override
+				protected void configureServlets() {
+					serve("*").with(MyHttpServlet.class);
+				}
+			});
+		}
+	}
 
-    @Singleton
-    public static class MyHttpServlet extends HttpServlet {
-        public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-            resp.setStatus(200);
-            resp.getOutputStream().write("hello world".getBytes());
-        }
+	@Singleton
+	public static class MyHttpServlet extends HttpServlet {
+		public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+			resp.setStatus(200);
+			resp.getOutputStream().write("hello world".getBytes());
+		}
 
-    }
-
+	}
 
 }
