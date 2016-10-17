@@ -31,8 +31,8 @@ public class App {
 
 		addGuiceFilter(context);
 
-		tomcat.addServlet("",MyHttpServlet.class.getSimpleName(),MyHttpServlet.class.getName());
-		context.addServletMapping("",MyHttpServlet.class.getSimpleName());
+		tomcat.addServlet("", IndexServlet.class.getSimpleName(), IndexServlet.class.getName());
+		context.addServletMapping("", IndexServlet.class.getSimpleName());
 
 		tomcat.init();
 		tomcat.start();
@@ -60,6 +60,13 @@ public class App {
 					serve("*").with(MyHttpServlet.class);
 				}
 			});
+		}
+	}
+
+	public static class IndexServlet extends HttpServlet {
+		public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+			resp.setStatus(200);
+			resp.getOutputStream().write("index".getBytes());
 		}
 	}
 
