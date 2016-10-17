@@ -31,6 +31,9 @@ public class App {
 
 		addGuiceFilter(context);
 
+		tomcat.addServlet("",MyHttpServlet.class.getSimpleName(),MyHttpServlet.class.getName());
+		context.addServletMapping("",MyHttpServlet.class.getSimpleName());
+
 		tomcat.init();
 		tomcat.start();
 		tomcat.getServer().await();
